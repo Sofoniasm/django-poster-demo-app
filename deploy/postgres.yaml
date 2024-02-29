@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: django-postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi   
+
+---  
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,18 +22,25 @@ spec:
   selector:
     matchLabels:
       app: django
-      tier: postgres  # Corrected typo in 'postgres'
-  strategy:  # Corrected spelling of 'strategy'
+      tier: postgres  
+  strategy:  
     type: Recreate    
   template:
     metadata:
       labels:
         app: django
         tier: postgres
+  volumes:
+    - name: postgres-data
+      persistantVolumeClaim:
+         claimName: django-postgres-pvc      
     spec:
       containers:
       - name: postgres
-        image: postgres:15.2  # Corrected typo in 'postgres'
+        image: postgres:15.2  
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data 
         ports:
         - containerPort: 5432
           name: postgres
