@@ -9,8 +9,8 @@ spec:
   selector:
     matchLabels:
       app: django
-      tier: posgres
-  stratgy: 
+      tier: postgres  # Corrected typo in 'postgres'
+  strategy:  # Corrected spelling of 'strategy'
     type: Recreate    
   template:
     metadata:
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: posthgres:15.2
+        image: postgres:15.2  # Corrected typo in 'postgres'
         ports:
         - containerPort: 5432
           name: postgres
@@ -33,4 +33,4 @@ spec:
           valueFrom:
             secretKeyRef:
                name: db-password
-               key: password      
+               key: password
