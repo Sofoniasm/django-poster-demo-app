@@ -30,27 +30,27 @@ spec:
       labels:
         app: django
         tier: postgres
-  volumes:
-    - name: postgres-data
-      persistantVolumeClaim:
-         claimName: django-postgres-pvc      
     spec:
-      containers:
-      - name: postgres
-        image: postgres:15.2  
-        volumeMounts:
+      volumes:
         - name: postgres-data
-          mountPath: /var/lib/postgresql/data 
-        ports:
-        - containerPort: 5432
-          name: postgres
-        env:
-        - name: POSTGRES_DB
-          value: djangodb
-        - name: POSTGRES_USER
-          value: djangouser
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-               name: db-password
-               key: password
+          persistentVolumeClaim:
+            claimName: django-postgres-pvc      
+      containers:
+        - name: postgres
+          image: postgres:15.2  
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data 
+          ports:
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_DB
+              value: djangodb
+            - name: POSTGRES_USER
+              value: djangouser
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-password
+                  key: password
