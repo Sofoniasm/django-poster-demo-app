@@ -12,6 +12,7 @@ server {
         # redirects, we set the Host: header above already.
         proxy_redirect        off;
         proxy_pass            http://${APP_HOST}:${APP_PORT};
+        proxy_pass            https://${APP_HOST}:${APP_PORT};
         client_max_body_size  10M;
     }
 }
