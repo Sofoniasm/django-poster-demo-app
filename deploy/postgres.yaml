@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django
+      tier: posgres
+  stratgey: 
+    type: Recreate    
+  template:
+    metadata:
+      labels:
+        app: django
+        tier: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: posthgres:15.2
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+        - name: POSTGRES_DB
+          value: djangodb
+        - name: POSTGRES_USER
+          value: djangouser
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+               name: db-password
+               key: password      
